@@ -4,9 +4,9 @@ import java.util.List;
 
 public class RetrieveServiceForHo {
     //Coordonnées de la base
-    public String user="postgres";
-    public String password = "root";
-    public String url = "jdbc:postgresql://localhost:5432/ho";
+    public String user="root";
+    public String password = "nadamaalma";
+    public String url = "jdbc:mysql://localhost:3306/ho";
 
     //Requete pour recuperer les données
     public String query = "SELECT * FROM product_sale";

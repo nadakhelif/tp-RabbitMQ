@@ -14,27 +14,28 @@ public class Bo1 {
     //Définir sa queue
     public final static String QUEUE_NAME="bo1";
     //Definir son DAO
-    public static RetreiveUnsentDataService retreiveService;
-    public static UpdateService updateService;
+
+    public static DataSynchcronisationBO dataSynchcronisation;
 
     public static void main(String[] args) throws IOException, SQLException {
 
 
 
         //Instancier son DAO
-        retreiveService = new RetreiveUnsentDataService(1, false);
-        updateService = new UpdateService(1);
+        dataSynchcronisation =new DataSynchcronisationBO(1);
+
 
         //Preparation necessaire pour le sender de RabbitMQ
         ConnectionFactory connectionFactory = new ConnectionFactory();
         connectionFactory.setHost("localhost");
-
+        List<Product> productList = dataSynchcronisation.retrieve();
+        System.out.println(productList);
         //Definir le job
         TimerTask task = new TimerTask() {
             public void run(){
                 try {
                     //Recuperer ses produits
-                    List<Product> productList = retreiveService.retrieve();
+                    List<Product> productList = dataSynchcronisation.retrieve();
                     System.out.println(productList);
                     //Serialiser ses produits en mode JSON
                     String message = productList.toString();
@@ -46,7 +47,7 @@ public class Bo1 {
                         channel.basicPublish("", QUEUE_NAME  + Integer.toString(1), null, message.getBytes());
                         System.out.println(" [x] sent '" + message + " '" + LocalDateTime.now().toString());
                         //Mise en TRUE de l'attribut sent dans la table de la base de données
-                        updateService.update(productList);
+                        dataSynchcronisation.update(productList);
                     } catch (TimeoutException e) {
                         e.printStackTrace();
                     } catch (IOException e) {

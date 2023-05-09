@@ -42,9 +42,9 @@ public class Bo2 {
 
                     try (Connection connection = connectionFactory.newConnection()) {
                         Channel channel = connection.createChannel();
-                        channel.queueDeclare(QUEUE_NAME  + Integer.toString(2), false, false, false, null);
+                        channel.queueDeclare(QUEUE_NAME , false, false, false, null);
 
-                        channel.basicPublish("", QUEUE_NAME  + Integer.toString(2), null, message.getBytes());
+                        channel.basicPublish("", QUEUE_NAME, null, message.getBytes());
                         System.out.println(" [x] sent '" + message + " '" + LocalDateTime.now().toString());
                         //Mise en TRUE de l'attribut sent dans la table de la base de données
                         dataSynchcronisation.update(productList);

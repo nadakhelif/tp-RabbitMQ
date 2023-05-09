@@ -12,5 +12,7 @@
     <orderEntry type="library" name="mysql-connector-java-5.1.46" level="project" />
     <orderEntry type="library" name="jackson-core-2.15.0" level="project" />
     <orderEntry type="library" name="com.fasterxml.jackson.databind" level="project" />
+    <orderEntry type="library" name="jackson-databind-2.15.0" level="project" />
+    <orderEntry type="library" name="jackson-annotations-2.15.0" level="project" />
   </component>
 </module>

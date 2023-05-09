@@ -10,7 +10,9 @@ import com.rabbitmq.client.DeliverCallback;
 
 
 import javax.swing.*;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
@@ -25,10 +27,6 @@ public class HO {
 
         //Instancier son DAO
         InsertService insertService = new InsertService();
-
-
-
-
         //Preparation necessaire pour le receiver de RabbitMQ
         ConnectionFactory connectionFactory = new ConnectionFactory();
         connectionFactory.setHost("localhost");
@@ -45,7 +43,9 @@ public class HO {
             //La reception et la deserialisation de JSON à une liste du message
             String receivedMessage = new String(delivery.getBody(),"UTF-8");
             System.out.println(receivedMessage);
-            List<Product> productList = deserialize(receivedMessage);
+            List<Product> productList = null;
+            productList = deserialize(delivery.getBody());
+            System.out.println("hello nada ");
             System.out.println(productList);
             try {
                 //insertion dans la base
@@ -66,9 +66,15 @@ public class HO {
         });
     }
 
-    public static List<Product> deserialize(String message) throws IOException {
+
+//    public static List<Product> deserialize(byte[] bytes) throws IOException, ClassNotFoundException {
+//        ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+//        ObjectInputStream objIn = new ObjectInputStream(in);
+//        return (List<Product>) objIn.readObject();
+//    }
+    public static List<Product> deserialize(byte[] message) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(message, new TypeReference<List<Product>>(){});
 
-    }
+}
 }

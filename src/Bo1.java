@@ -1,13 +1,18 @@
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import java.io.IOException;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeoutException;
+import java.io.IOException;
+import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,13 +46,18 @@ public class Bo1 {
                     List<Product> productList = dataSynchcronisation.retrieve();
                     System.out.println(productList);
                     //Serialiser ses produits en mode JSON
+
+//                    String message1 = new String(serialize(productList), "UTF-8");
+//                    System.out.println(message1+"hello");
+//                    byte [] message = serialize(productList);
                     String message = serialize(productList);
+
                     try (Connection connection = connectionFactory.newConnection()) {
                         Channel channel = connection.createChannel();
-                        channel.queueDeclare(QUEUE_NAME  + Integer.toString(1), false, false, false, null);
+                        channel.queueDeclare(QUEUE_NAME, false, false, false, null);
 
-                        channel.basicPublish("", QUEUE_NAME  + Integer.toString(1), null, message.getBytes());
-                        System.out.println(" [x] sent '" + message + " '" + LocalDateTime.now().toString());
+                        channel.basicPublish("", QUEUE_NAME , null, message.getBytes());
+                        System.out.println(" [x] sent '"  + message + " '" + LocalDateTime.now().toString());
                         //Mise en TRUE de l'attribut sent dans la table de la base de données
                         dataSynchcronisation.update(productList);
                     } catch (TimeoutException e) {
@@ -65,10 +75,18 @@ public class Bo1 {
         timer.schedule(task,0, delay);
 
     }
-    public static String serialize(List<Product> productList) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.writeValueAsString(productList);
-    }
+
+//    public static byte[] serialize(List<Product> productList) throws IOException {
+//        ByteArrayOutputStream out = new ByteArrayOutputStream();
+//        ObjectOutputStream objOut = new ObjectOutputStream(out);
+//        objOut.writeObject(productList);
+//        objOut.flush();
+//        return out.toByteArray();
+//    }
+public static String serialize(List<Product> productList) throws JsonProcessingException {
+    ObjectMapper objectMapper = new ObjectMapper();
+    return objectMapper.writeValueAsString(productList);
+}
 
 
 }

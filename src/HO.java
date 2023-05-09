@@ -18,7 +18,8 @@ import java.util.concurrent.TimeoutException;
 
 public class HO {
     //Définir sa queue
-    public final static String QUEUE_NAME="product_sale_queue";
+    public final static String QUEUE_NAME1="bo1";
+    public final static String QUEUE_NAME2="bo2";
 
     public static void main(String[] args) throws IOException, TimeoutException {
 
@@ -34,10 +35,10 @@ public class HO {
         Connection connection = connectionFactory.newConnection();
         Channel channel1 = connection.createChannel();
         Channel channel2 = connection.createChannel();
-        Channel channel3 = connection.createChannel();
-        channel1.queueDeclare(QUEUE_NAME + Integer.toString(1),false,false,false,null);
-        channel2.queueDeclare(QUEUE_NAME + Integer.toString(2),false,false,false,null);
-        channel3.queueDeclare(QUEUE_NAME + Integer.toString(3),false,false,false,null);
+
+        channel1.queueDeclare(QUEUE_NAME1,false,false,false,null);
+        channel2.queueDeclare(QUEUE_NAME2,false,false,false,null);
+
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
@@ -57,18 +58,15 @@ public class HO {
         };
 
 
-        channel1.basicConsume(QUEUE_NAME + Integer.toString(1),true,deliverCallback,consumerTag -> {
+        channel1.basicConsume(QUEUE_NAME1,true,deliverCallback,consumerTag -> {
             System.out.println("ERROR");
         });
-        channel2.basicConsume(QUEUE_NAME + Integer.toString(2),true,deliverCallback,consumerTag -> {
-            System.out.println("ERROR");
-        });
-        channel3.basicConsume(QUEUE_NAME + Integer.toString(3),true,deliverCallback,consumerTag -> {
+        channel2.basicConsume(QUEUE_NAME2,true,deliverCallback,consumerTag -> {
             System.out.println("ERROR");
         });
     }
 
-    public static List<Product> deserialize(String message) throws JsonProcessingException {
+    public static List<Product> deserialize(String message) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(message, new TypeReference<List<Product>>(){});
 

@@ -1,7 +1,7 @@
 
 
-        import java.sql.*;
-        import java.util.List;
+import java.sql.*;
+import java.util.List;
 
 public class InsertService {
     //coordonnées de la base

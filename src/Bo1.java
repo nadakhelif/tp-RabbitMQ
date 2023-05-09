@@ -9,6 +9,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeoutException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class Bo1 {
 
     //Définir sa queue
@@ -38,8 +41,7 @@ public class Bo1 {
                     List<Product> productList = dataSynchcronisation.retrieve();
                     System.out.println(productList);
                     //Serialiser ses produits en mode JSON
-                    String message = productList.toString();
-
+                    String message = serialize(productList);
                     try (Connection connection = connectionFactory.newConnection()) {
                         Channel channel = connection.createChannel();
                         channel.queueDeclare(QUEUE_NAME  + Integer.toString(1), false, false, false, null);
@@ -62,6 +64,10 @@ public class Bo1 {
         long delay = 60*1000L;
         timer.schedule(task,0, delay);
 
+    }
+    public static String serialize(List<Product> productList) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(productList);
     }
 
 

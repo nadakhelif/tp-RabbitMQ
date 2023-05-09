@@ -12,7 +12,7 @@ import java.util.concurrent.TimeoutException;
 public class Bo2 {
 
     //Définir sa queue
-    public final static String QUEUE_NAME="bo1";
+    public final static String QUEUE_NAME="bo2";
     //Definir son DAO
     public static RetreiveUnsentDataService retreiveService;
     public static UpdateService updateService;

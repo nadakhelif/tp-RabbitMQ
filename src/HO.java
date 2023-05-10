@@ -28,15 +28,7 @@ public class HO {
         //Instancier son DAO
         DataSynchronisationHO dataSynchronisationHO = new DataSynchronisationHO();
         //Instancier l'interface
-        JFrame tableFrame = new JFrame();
-        tableFrame.setVisible(true);
-        tableFrame.setTitle("HO");
-
-        TableHo tableHo = new TableHo();
-
-        tableFrame.add(tableHo.getScrollPane());
-        tableFrame.setSize(700,450);
-        tableFrame.setLocation(500,250);
+        DashbordHo dashbordHo =new DashbordHo();
 
         //read from rabbit mq
         ConnectionFactory connectionFactory = new ConnectionFactory();
@@ -62,8 +54,10 @@ public class HO {
                 //insertion dans la base
                 dataSynchronisationHO.insert(productList);
                 //update tableau
+//                displayHo.setMessage("success added this "+productList );
+                dashbordHo.fillTable(productList.size(),delivery.getEnvelope().getRoutingKey());
 
-                tableHo.fillTable();
+//                tableHo.fillTable();
 
             } catch (SQLException throwables) {
                 throwables.printStackTrace();

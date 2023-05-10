@@ -26,8 +26,8 @@ public class HO {
     public static void main(String[] args) throws IOException, TimeoutException {
 
         //Instancier son DAO
-        InsertService insertService = new InsertService();
-        //Preparation necessaire pour le receiver de RabbitMQ
+        DataSynchronisationHO dataSynchronisationHO = new DataSynchronisationHO();
+        //read from rabbit mq
         ConnectionFactory connectionFactory = new ConnectionFactory();
         connectionFactory.setHost("localhost");
         Connection connection = connectionFactory.newConnection();
@@ -44,12 +44,12 @@ public class HO {
             String receivedMessage = new String(delivery.getBody(),"UTF-8");
             System.out.println(receivedMessage);
             List<Product> productList = null;
-            productList = deserialize(delivery.getBody());
+            productList = SerealisationDeseralisation.deserialize(delivery.getBody());
             System.out.println("hello nada ");
             System.out.println(productList);
             try {
                 //insertion dans la base
-                insertService.insert(productList);
+                dataSynchronisationHO.insert(productList);
                 //Mettre à jour le tableau
 
             } catch (SQLException throwables) {
@@ -67,14 +67,5 @@ public class HO {
     }
 
 
-//    public static List<Product> deserialize(byte[] bytes) throws IOException, ClassNotFoundException {
-//        ByteArrayInputStream in = new ByteArrayInputStream(bytes);
-//        ObjectInputStream objIn = new ObjectInputStream(in);
-//        return (List<Product>) objIn.readObject();
-//    }
-    public static List<Product> deserialize(byte[] message) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(message, new TypeReference<List<Product>>(){});
 
-}
 }

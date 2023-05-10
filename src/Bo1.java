@@ -14,8 +14,6 @@ import java.util.concurrent.TimeoutException;
 import java.io.IOException;
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Bo1 {
 
@@ -26,31 +24,21 @@ public class Bo1 {
     public static DataSynchcronisationBO dataSynchcronisation;
 
     public static void main(String[] args) throws IOException, SQLException {
-
-
-
         //Instancier son DAO
         dataSynchcronisation =new DataSynchcronisationBO(1);
-
-
-        //Preparation necessaire pour le sender de RabbitMQ
+        // sender de RabbitMQ
         ConnectionFactory connectionFactory = new ConnectionFactory();
         connectionFactory.setHost("localhost");
         List<Product> productList = dataSynchcronisation.retrieve();
         System.out.println(productList);
-        //Definir le job
-        TimerTask task = new TimerTask() {
+        //timer thread
+        TimerTask job = new TimerTask() {
             public void run(){
                 try {
                     //Recuperer ses produits
                     List<Product> productList = dataSynchcronisation.retrieve();
                     System.out.println(productList);
-                    //Serialiser ses produits en mode JSON
-
-//                    String message1 = new String(serialize(productList), "UTF-8");
-//                    System.out.println(message1+"hello");
-//                    byte [] message = serialize(productList);
-                    String message = serialize(productList);
+                    String message = SerealisationDeseralisation.serialize(productList);
 
                     try (Connection connection = connectionFactory.newConnection()) {
                         Channel channel = connection.createChannel();
@@ -70,23 +58,9 @@ public class Bo1 {
         };
         Timer timer = new Timer("Timer");
 
-        //Ce job s'executera chaque minute
-        long delay = 60*1000L;
-        timer.schedule(task,0, delay);
+        //every minute
+        long minute = 60*1000L;
+        timer.schedule(job,0, minute);
 
     }
-
-//    public static byte[] serialize(List<Product> productList) throws IOException {
-//        ByteArrayOutputStream out = new ByteArrayOutputStream();
-//        ObjectOutputStream objOut = new ObjectOutputStream(out);
-//        objOut.writeObject(productList);
-//        objOut.flush();
-//        return out.toByteArray();
-//    }
-public static String serialize(List<Product> productList) throws JsonProcessingException {
-    ObjectMapper objectMapper = new ObjectMapper();
-    return objectMapper.writeValueAsString(productList);
-}
-
-
 }

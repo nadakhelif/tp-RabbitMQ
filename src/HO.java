@@ -27,6 +27,17 @@ public class HO {
 
         //Instancier son DAO
         DataSynchronisationHO dataSynchronisationHO = new DataSynchronisationHO();
+        //Instancier l'interface
+        JFrame tableFrame = new JFrame();
+        tableFrame.setVisible(true);
+        tableFrame.setTitle("HO");
+
+        TableHo tableHo = new TableHo();
+
+        tableFrame.add(tableHo.getScrollPane());
+        tableFrame.setSize(700,450);
+        tableFrame.setLocation(500,250);
+
         //read from rabbit mq
         ConnectionFactory connectionFactory = new ConnectionFactory();
         connectionFactory.setHost("localhost");
@@ -40,7 +51,7 @@ public class HO {
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-            //La reception et la deserialisation de JSON à une liste du message
+            //deserialisation
             String receivedMessage = new String(delivery.getBody(),"UTF-8");
             System.out.println(receivedMessage);
             List<Product> productList = null;
@@ -50,7 +61,9 @@ public class HO {
             try {
                 //insertion dans la base
                 dataSynchronisationHO.insert(productList);
-                //Mettre à jour le tableau
+                //update tableau
+
+                tableHo.fillTable();
 
             } catch (SQLException throwables) {
                 throwables.printStackTrace();

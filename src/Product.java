@@ -106,6 +106,18 @@ public class Product {
         this.total = total;
         this.bo_num=bo_num;
     }
+    public Product(int id, Date date, String region, String product, int qty, float cost, double amt, float tax, double total) {
+        this.id = id;
+        this.date = date;
+        this.region = region;
+        this.product = product;
+        this.qty = qty;
+        this.cost = cost;
+        this.amt = amt;
+        this.tax = tax;
+        this.total = total;
+        this.bo_num=0;
+    }
 
     @Override
     public String toString() {

@@ -14,13 +14,13 @@ CREATE TABLE product_sale(
 
 
 INSERT INTO product_sale(date, region, product, qty, cost, amt, tax, total) VALUES(
-                                                                                            '2021-12-31','tunisie','pull',2,25,12.2,7.5,60
+                                                                                            '2023-7-31','tunisie','farchia',2,25,12.2,7.5,60
                                                                                         );
 
 INSERT INTO product_sale(date, region, product, qty, cost, amt, tax, total) VALUES(
-                                                                                            '2021-12-31','france','pantalon',2,25,12.2,7.5,60
+                                                                                            '2023-8-31','france','malhfa',2,25,12.2,7.5,60
                                                                                         );
 
 INSERT INTO product_sale(date, region, product, qty, cost, amt, tax, total) VALUES(
-                                                                                            '2021-5-25','tunisie','gants',2,25,12.2,7.5,60
+                                                                                            '2023-5-25','allemand','noum',2,25,12.2,7.5,60
                                                                                         );

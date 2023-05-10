@@ -48,7 +48,7 @@ public class DataSynchronisationHO {
                 Product product = new Product(rs.getInt("id"),rs.getDate("date"),rs.getString("region"),
                         rs.getString("product"),rs.getInt("qty"),rs.getFloat("cost"),
                         rs.getDouble("amt"),rs.getFloat("tax"),
-                        rs.getDouble("total"),rs.getInt("bo_num"));
+                        rs.getDouble("total"));
 
                 res.add(product);
             }

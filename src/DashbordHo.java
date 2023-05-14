@@ -41,7 +41,9 @@ public class DashbordHo {
         DataSynchronisationHO dataSynchronisationHO = new DataSynchronisationHO();
         List<Product> productList = dataSynchronisationHO.retrieve();
         if(size>0){
-        titleLabel.setText("Update done successfully: Added " +size+ " rows to the database.from "+ bo);}
+        titleLabel.setText("Update done successfully: Added " +size+ " rows to the database.from "+ bo);}else{
+            titleLabel.setText("Head Office DB up to date");
+        }
         for (Product p : productList) {
             dtm.addRow(new Object[]{p.getDate().toString(),
                     p.getRegion(),

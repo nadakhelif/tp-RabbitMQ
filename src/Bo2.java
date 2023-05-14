@@ -37,11 +37,11 @@ public class Bo2 {
         List<Product> productList = dataSynchcronisation.retrieve();
         System.out.println(productList);
         //button on click execute the synchronisation
-        JFrame frame = new JFrame("BO");
+        JFrame frame = new JFrame("BO2");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(300, 200);
 
-        JButton button = new JButton("Click me");
+        JButton button = new JButton("Send Data ");
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
